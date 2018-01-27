@@ -1,0 +1,4 @@
+IDEAS AND OBSERVATIONS:
+
+- high unit price = low quantity
+- train one model per year, evaluate using ensemble of predictions
