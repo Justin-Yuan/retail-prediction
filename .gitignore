@@ -11,6 +11,9 @@ pom.xml.asc
 .lein-plugins/
 .lein-failures
 .nrepl-port
+data/
+./data
+./data/*
 ./data/datasets.pkl
 ./data/result.pkl
 ./data/old
