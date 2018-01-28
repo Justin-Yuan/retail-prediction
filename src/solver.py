@@ -48,7 +48,7 @@ class Solver(object):
 	def train(self):
 		""" start training on the model 
 		"""
-		total_step = len(self.data_loader)
+		total_step = len(self.data_loader_train)
 		for epoch in range(self.num_epochs):
 			for i, (x, y) in enumerate(self.data_loader_train):
 				x  = self.to_variable(x.float())

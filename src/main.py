@@ -24,7 +24,7 @@ def main(config):
 				   "validation": data_loader_valid,
 				   "test": data_loader_test
 				   }
-	model_dims = [(config.input_dim, 500), (500, 200), (200, 50), (50, 10), (10, 5), (5, 1)]
+	model_dims = [(config.input_dim, 100), (100, 10), (10, 1)]
 	if config.mode == "train":
 		# for model training phase 
 		solver = Solver(config, model_dims, data_loader)
