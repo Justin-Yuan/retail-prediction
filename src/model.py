@@ -22,7 +22,8 @@ class RetailModel(nn.Module):
 		for i in range(len(self.dims)):
 			in_dim, out_dim = self.dims[i]
 			self.fcs.append(nn.Linear(in_dim, out_dim))
-			self.fcs.append(nn.ReLU())
+			# self.fcs.append(nn.ReLU())
+			self.fcs.append(nn.ELU())
 		self.net = nn.Sequential(*self.fcs)
 
 	def forward(self, x):
