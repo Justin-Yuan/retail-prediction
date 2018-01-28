@@ -18,15 +18,17 @@ from model import RetailModel
 class Solver(object):
 	""" build the model, trains it with the data being loaded and infer on new data 
 	"""
-	def __init__(self, config, model_dims, data_loader, reuse=False):
+	def __init__(self, config, model_dims, data_loader, reuse=False, param_path=None):
 		self.lr = config.learning_rate
 		self.num_epochs = config.num_epochs
 		self.batch_size = config.batch_size
 		self.log_step = config.log_step
 		self.model_dir = config.model_dir 
 
-		self.build_model(model_dims, reuse)
-		self.data_loader = data_loader
+		self.build_model(model_dims, reuse, param_path)
+		self.data_loader_train = data_loader["train"]
+		self.data_loader_valid = data_loader["validation"]
+		self.data_loader_test = data_loader["test"]
 
 	def build_model(self, dims, reuse=False, param_path=None):
 		self.model = RetailModel(dims)
@@ -48,7 +50,7 @@ class Solver(object):
 		"""
 		total_step = len(self.data_loader)
 		for epoch in range(self.num_epochs):
-			for i, (x, y) in enumerate(self.data_loader):
+			for i, (x, y) in enumerate(self.data_loader_train):
 				x  = self.to_variable(x.float())
 				y = self.to_variable(y.float())
 

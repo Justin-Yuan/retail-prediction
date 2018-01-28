@@ -29,8 +29,8 @@ class RetailDataset(data.Dataset):
 
 
 
-def get_loader(path, batch_size, num_workers):
-	dataset = RetailDataset(path)
+def get_loader(path, batch_size, num_workers, mode="train"):
+	dataset = RetailDataset(path, mode=mode)
 	data_loader = data.DataLoader(dataset=dataset,
                                   batch_size=batch_size,
                                   shuffle=True,
