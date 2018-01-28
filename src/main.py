@@ -24,17 +24,17 @@ def main(config):
 				   "validation": data_loader_valid,
 				   "test": data_loader_test
 				   }
+	model_dims = [(config.input_dim, 500), (500, 200), (200, 50), (50, 10), (10, 5), (5, 1)]
 	if config.mode == "train":
 		# for model training phase 
-		model_dims = [(config.input_dim, 500), (500, 200), (200, 50), (50, 10), (10, 5), (5, 1)]
 		solver = Solver(config, model_dims, data_loader)
 		solver.train()
-
-		test_data = np.asarray([1,2,3,4,5,6,7,8])
-		solver.inference(test_data)
 	elif config.mode == "test":
 		# for model test phase 
 		solver = Solver(config, model_dims, data_loader, reuse=True, param_path=config.model_path)
+		solver.test()
+	else:
+		print("invalid mode")
 
 
 

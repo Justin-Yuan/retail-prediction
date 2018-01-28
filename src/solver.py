@@ -64,10 +64,30 @@ class Solver(object):
 					print( 'Epoch [%d/%d], Step[%d/%d], loss: %.4f, ' 
                           % (epoch+1, self.num_epochs, i+1, total_step, loss.data[0]))
 
-
 			# save the model per epoch, only save parameters 
 			model_path = os.path.join(self.model_dir, 'model-%d.pkl' %(epoch+1))
 			torch.save(self.model.state_dict(), model_path)
+
+			# on validation set 
+			x, y = next(iter(self.data_loader_valid))
+			x  = self.to_variable(x.float())
+			y = self.to_variable(y.float())
+			output = self.model(x)
+			loss = self.loss(output, y)
+			print( 'Validation: Epoch [%d/%d], loss: %.4f, ' 
+                  % (epoch+1, self.num_epochs, loss.data[0]))
+
+	def test(self):
+		""" evaluate on test data 
+		"""
+		x, y = next(iter(self.data_loader_test))
+		x  = self.to_variable(x.float())
+		y = self.to_variable(y.float())
+		print(x.size(), y.size())
+		output = self.model(x)
+		loss = self.loss(output, y)
+		print( 'Test loss: %.4f, ' % (loss.data[0]))
+		return output, loss 
 
 
 	def inference(self, x):

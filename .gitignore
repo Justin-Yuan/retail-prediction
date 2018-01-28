@@ -14,5 +14,6 @@ pom.xml.asc
 ./data/datasets.pkl
 ./data/result.pkl
 ./data/old
+./data/old/
 ./data/old/*
 ./src/models/*
