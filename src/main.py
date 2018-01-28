@@ -12,6 +12,17 @@ from solver import Solver
 from model import RetailModel, Ensemble 
 
 
+def build_ensemble(model_dims, paths=["models/model-20.pkl", "models_2009/model-20.pkl", "models_2010/model-20.pkl", "models_2011/model-20.pkl"]):
+	# build the model ensembles given the model architecture and trained models 
+	models = []
+	for path in paths:
+		net = RetailModel(model_dims)
+		net.load_state_dict(torch.load(path))
+		model.append(net)
+	ensemble = Ensemble(models)
+	return ensemble
+
+
 def main(config):
 	# main execution file
 
@@ -31,7 +42,12 @@ def main(config):
 				   "validation": data_loader_valid,
 				   "test": data_loader_test
 				   }
+
+	# neural net architecture (for all modes)
 	model_dims = [(config.input_dim, 200), (200, 100), (100, 50), (50, 10), (10, 1)]
+	# trained model param paths (for ensemble)
+	paths=["models/model-20.pkl", "models_2009/model-20.pkl", "models_2010/model-20.pkl", "models_2011/model-20.pkl"]):
+
 
 	if config.mode == "train":
 		# for model training phase 
@@ -47,26 +63,10 @@ def main(config):
 		solver.test()
 	elif config.mode == "ensemble":
 		# for model ensemble evaluation 
-		path0 = "models/model-20.pkl"
-		net0 = RetailModel(model_dims)
-		net0.load_state_dict(torch.load(path0))
-
-		path1 = "models_2009/model-20.pkl"
-		net1 = RetailModel(model_dims)
-		net1.load_state_dict(torch.load(path1))
-		
-		path2 = "models_2010/model-20.pkl"
-		net2 = RetailModel(model_dims)
-		net2.load_state_dict(torch.load(path2))
-		
-		path3 = "models_2011/model-20.pkl"
-		net3 = RetailModel(model_dims)
-		net3.load_state_dict(torch.load(path3))
-
-		ensemble = Ensemble([net0, net1, net2, net3])
+		ensemble = build_ensemble(model_dims, paths)
 		l = nn.MSELoss()
 
-		# evaluate loss 
+		# evaluate loss on training, validation and test sets 
 		for loader in [data_loader_train, data_loader_valid, data_loader_test]:
 			x, y = next(iter(loader))
 			x = Variable(x.float())
@@ -74,6 +74,21 @@ def main(config):
 			output = ensemble(x)
 			loss = l(output, y)
 			print( 'Loss with Ensembles: %.4f, ' % (loss.data[0]))
+	elif config.mode == "submission":
+		# for submission 
+		# build ensemble model and load input data 
+		ensemble = build_ensemble(model_dims, paths)
+		with open(config.)
+		x = Variable(torch.from_numpy(x))
+
+		# calculate predictions 
+		output = ensemble(x)
+		predictions = output.data.numpy()
+
+		# output to file 
+		output_path = os.path.join(config.output_dir, "predictions.pkl") 
+		with open(output_path, "w") as f:
+			pickle.dump(predictions, f)
 	else:
 		# other invalid modes 
 		print("invalid mode")
@@ -97,6 +112,11 @@ if __name__ == "__main__":
 	parser.add_argument("--input_dim", type=int, default=175)
 	parser.add_argument("--mode", type=str, default="train")
 	parser.add_argument("--model_path", type=str, default="./models/model-6.pkl")
+
+	# for submission 
+	parser.add_argument("--output_dir", type=str, default="../results")
+	parser.add_argument("--submission_input_path", type=str, default="../results/inputs.pkl")
+
 
 
 	config = parser.parse_args()
