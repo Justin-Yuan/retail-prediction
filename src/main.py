@@ -1,5 +1,6 @@
 # main execution file 
 
+import os 
 import numpy as np 
 import argparse
 import pickle 
@@ -18,7 +19,7 @@ def build_ensemble(model_dims, paths=["models/model-20.pkl", "models_2009/model-
 	for path in paths:
 		net = RetailModel(model_dims)
 		net.load_state_dict(torch.load(path))
-		model.append(net)
+		models.append(net)
 	ensemble = Ensemble(models)
 	return ensemble
 
@@ -46,7 +47,7 @@ def main(config):
 	# neural net architecture (for all modes)
 	model_dims = [(config.input_dim, 200), (200, 100), (100, 50), (50, 10), (10, 1)]
 	# trained model param paths (for ensemble)
-	paths=["models/model-20.pkl", "models_2009/model-20.pkl", "models_2010/model-20.pkl", "models_2011/model-20.pkl"]):
+	paths=["models/model-20.pkl", "models_2009/model-20.pkl", "models_2010/model-20.pkl", "models_2011/model-20.pkl"]
 
 
 	if config.mode == "train":
@@ -78,8 +79,9 @@ def main(config):
 		# for submission 
 		# build ensemble model and load input data 
 		ensemble = build_ensemble(model_dims, paths)
-		with open(config.)
-		x = Variable(torch.from_numpy(x))
+		with open(config.submission_input_path, "rb") as f:
+			x = pickle.load(f)
+		x = Variable(torch.from_numpy(x).float())
 
 		# calculate predictions 
 		output = ensemble(x)
@@ -87,7 +89,7 @@ def main(config):
 
 		# output to file 
 		output_path = os.path.join(config.output_dir, "predictions.pkl") 
-		with open(output_path, "w") as f:
+		with open(output_path, "wb") as f:
 			pickle.dump(predictions, f)
 	else:
 		# other invalid modes 
