@@ -13,5 +13,6 @@ pom.xml.asc
 .nrepl-port
 ./data/datasets.pkl
 ./data/result.pkl
+./data/old
 ./data/old/*
 ./src/models/*
