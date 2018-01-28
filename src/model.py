@@ -18,7 +18,6 @@ class RetailModel(nn.Module):
 		super(RetailModel, self).__init__()
 
 		self.dims = dims 
-		print(self.dims)
 		self.fcs = []
 		for i in range(len(self.dims)):
 			in_dim, out_dim = self.dims[i]

@@ -77,13 +77,24 @@ class Solver(object):
 			print( 'Validation: Epoch [%d/%d], loss: %.4f, ' 
                   % (epoch+1, self.num_epochs, loss.data[0]))
 
+	def validation(self):
+		""" evaluate on validation data 
+		"""
+		x, y = next(iter(self.data_loader_valid))
+		x  = self.to_variable(x.float())
+		y = self.to_variable(y.float())
+		output = self.model(x)
+		loss = self.loss(output, y)
+		print( 'Test loss: %.4f, ' % (loss.data[0]))
+		return output, loss 
+
+
 	def test(self):
 		""" evaluate on test data 
 		"""
 		x, y = next(iter(self.data_loader_test))
 		x  = self.to_variable(x.float())
 		y = self.to_variable(y.float())
-		print(x.size(), y.size())
 		output = self.model(x)
 		loss = self.loss(output, y)
 		print( 'Test loss: %.4f, ' % (loss.data[0]))

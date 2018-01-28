@@ -29,10 +29,13 @@ def main(config):
 		# for model training phase 
 		solver = Solver(config, model_dims, data_loader)
 		solver.train()
+	elif config.mode == "validation":
+		# for model validation phase 
+		solver = Solver(config, model_dims, data_loader, reuse=True, param_path=config.model_path)
+		solver.validation()
 	elif config.mode == "test":
 		# for model test phase 
 		solver = Solver(config, model_dims, data_loader, reuse=True, param_path=config.model_path)
-		solver.test()
 	else:
 		print("invalid mode")
 
