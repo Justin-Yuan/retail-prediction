@@ -33,6 +33,26 @@ class RetailModel(nn.Module):
 		return self.net(x)
 
 
+class Ensemble(nn.Module):
+	""" an ensemble of models trained for 3 years
+
+	Input
+		ensembles: list of models  
+	"""
+	def __init__(self, ensembles):
+		super(Ensemble, self).__init__()
+		self.ensembles = ensembles
+
+
+	def forward(self, x):
+		 # there should be at least one model in the ensembles list 
+		 output = self.ensembles[0](x)
+		 for model in self.ensembles[1:]:
+		 	output += model(x)
+		 output = output / len(self.ensembles)
+		 return output 
+
+
 
 
 

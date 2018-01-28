@@ -24,7 +24,7 @@ def main(config):
 				   "validation": data_loader_valid,
 				   "test": data_loader_test
 				   }
-	model_dims = [(config.input_dim, 100), (100, 50), (50, 10), (10, 1)]
+	model_dims = [(config.input_dim, 200), (200, 100), (100, 50), (50, 10), (10, 1)]
 	if config.mode == "train":
 		# for model training phase 
 		solver = Solver(config, model_dims, data_loader)
@@ -37,8 +37,13 @@ def main(config):
 		# for model test phase 
 		solver = Solver(config, model_dims, data_loader, reuse=True, param_path=config.model_path)
 		solver.test()
+	elif config.mode == "ensemble":
+		# for model ensemble evaluation 
+		pass 
+		
 	else:
 		print("invalid mode")
+
 
 
 
