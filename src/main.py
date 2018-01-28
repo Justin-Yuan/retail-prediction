@@ -36,6 +36,7 @@ def main(config):
 	elif config.mode == "test":
 		# for model test phase 
 		solver = Solver(config, model_dims, data_loader, reuse=True, param_path=config.model_path)
+		solver.test()
 	else:
 		print("invalid mode")
 
